@@ -9,8 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TransitRouteImport } from './routes/transit'
+import { Route as NoticeRouteImport } from './routes/notice'
+import { Route as MyMetroRouteImport } from './routes/my-metro'
+import { Route as LostFoundRouteImport } from './routes/lost-found'
+import { Route as ComplaintRouteImport } from './routes/complaint'
+import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TransitRoute = TransitRouteImport.update({
+  id: '/transit',
+  path: '/transit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticeRoute = NoticeRouteImport.update({
+  id: '/notice',
+  path: '/notice',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyMetroRoute = MyMetroRouteImport.update({
+  id: '/my-metro',
+  path: '/my-metro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LostFoundRoute = LostFoundRouteImport.update({
+  id: '/lost-found',
+  path: '/lost-found',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComplaintRoute = ComplaintRouteImport.update({
+  id: '/complaint',
+  path: '/complaint',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssistantRoute = AssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +55,116 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/complaint': typeof ComplaintRoute
+  '/lost-found': typeof LostFoundRoute
+  '/my-metro': typeof MyMetroRoute
+  '/notice': typeof NoticeRoute
+  '/transit': typeof TransitRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/complaint': typeof ComplaintRoute
+  '/lost-found': typeof LostFoundRoute
+  '/my-metro': typeof MyMetroRoute
+  '/notice': typeof NoticeRoute
+  '/transit': typeof TransitRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/complaint': typeof ComplaintRoute
+  '/lost-found': typeof LostFoundRoute
+  '/my-metro': typeof MyMetroRoute
+  '/notice': typeof NoticeRoute
+  '/transit': typeof TransitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/assistant'
+    | '/complaint'
+    | '/lost-found'
+    | '/my-metro'
+    | '/notice'
+    | '/transit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/assistant'
+    | '/complaint'
+    | '/lost-found'
+    | '/my-metro'
+    | '/notice'
+    | '/transit'
+  id:
+    | '__root__'
+    | '/'
+    | '/assistant'
+    | '/complaint'
+    | '/lost-found'
+    | '/my-metro'
+    | '/notice'
+    | '/transit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AssistantRoute: typeof AssistantRoute
+  ComplaintRoute: typeof ComplaintRoute
+  LostFoundRoute: typeof LostFoundRoute
+  MyMetroRoute: typeof MyMetroRoute
+  NoticeRoute: typeof NoticeRoute
+  TransitRoute: typeof TransitRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/transit': {
+      id: '/transit'
+      path: '/transit'
+      fullPath: '/transit'
+      preLoaderRoute: typeof TransitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notice': {
+      id: '/notice'
+      path: '/notice'
+      fullPath: '/notice'
+      preLoaderRoute: typeof NoticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-metro': {
+      id: '/my-metro'
+      path: '/my-metro'
+      fullPath: '/my-metro'
+      preLoaderRoute: typeof MyMetroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lost-found': {
+      id: '/lost-found'
+      path: '/lost-found'
+      fullPath: '/lost-found'
+      preLoaderRoute: typeof LostFoundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/complaint': {
+      id: '/complaint'
+      path: '/complaint'
+      fullPath: '/complaint'
+      preLoaderRoute: typeof ComplaintRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assistant': {
+      id: '/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AssistantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +177,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AssistantRoute: AssistantRoute,
+  ComplaintRoute: ComplaintRoute,
+  LostFoundRoute: LostFoundRoute,
+  MyMetroRoute: MyMetroRoute,
+  NoticeRoute: NoticeRoute,
+  TransitRoute: TransitRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
