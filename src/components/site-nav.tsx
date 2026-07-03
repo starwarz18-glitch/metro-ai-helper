@@ -24,7 +24,7 @@ export function SiteNav() {
           <span className="grid h-8 w-8 place-items-center rounded-xl bg-[image:var(--gradient-primary)] text-white">
             <Train className="h-4 w-4" />
           </span>
-          <span className="text-sm sm:text-base">서울교통공사 <span className="text-primary">AX</span></span>
+          <span className="text-sm sm:text-base">서울교통공사 <span className="text-primary">AI 서비스</span></span>
         </Link>
         <nav className="hidden items-center gap-1 lg:flex">
           {links.map((l) => (
@@ -77,7 +77,7 @@ export function SiteFooter() {
           {/* Left */}
           <div className="flex flex-col gap-2">
             <p className="text-base font-semibold tracking-tight text-foreground">
-              서울교통공사 <span className="text-primary">AX</span>
+              서울교통공사 <span className="text-primary">AI 서비스</span>
             </p>
             <p className="text-sm text-muted-foreground">시민을 위한 AI 기반 디지털 서비스</p>
           </div>
@@ -137,7 +137,7 @@ export function SiteFooter() {
 
         {/* Bottom */}
         <div className="mt-12 border-t border-border pt-6 text-center text-xs text-muted-foreground sm:mt-16">
-          © 2026 Seoul Metro AX. All Rights Reserved.
+          © 2026 Seoul Metro AI Service. All Rights Reserved.
         </div>
       </div>
     </footer>
