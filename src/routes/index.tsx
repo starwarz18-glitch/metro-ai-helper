@@ -52,7 +52,6 @@ const recommendedQuestions = [
   "민원 접수하기",
 ] as const;
 
-const notices = [
 const notices: {
   tag: "안전" | "운행" | "혼잡" | "시설";
   level: "긴급" | "중요" | "일반";
