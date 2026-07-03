@@ -71,11 +71,74 @@ export function SiteNav() {
 
 export function SiteFooter() {
   return (
-    <footer className="mx-auto mt-24 max-w-6xl px-4 pb-10 pt-8 text-sm text-muted-foreground sm:px-6">
-      <div className="border-t pt-8">
-        <p className="font-medium text-foreground">서울교통공사 · 시민 중심 AX 홈페이지 리뉴얼</p>
-        <p className="mt-1">정보를 찾는 홈페이지에서 문제를 해결하는 AI 홈페이지로.</p>
-        <p className="mt-4 text-xs">© 2026 Seoul Metro AX Prototype. Mock data for concept demonstration.</p>
+    <footer className="border-t border-border bg-white">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
+          {/* Left */}
+          <div className="flex flex-col gap-2">
+            <p className="text-base font-semibold tracking-tight text-foreground">
+              서울교통공사 <span className="text-primary">AX</span>
+            </p>
+            <p className="text-sm text-muted-foreground">시민을 위한 AI 기반 디지털 서비스</p>
+          </div>
+
+          {/* Center */}
+          <div className="flex flex-col gap-2.5">
+            {[
+              { to: "/assistant", label: "AI Assistant" },
+              { to: "/transit", label: "실시간 운행 안내" },
+              { to: "/lost-found", label: "유실물 찾기" },
+              { to: "/complaint", label: "AI 민원 접수" },
+            ].map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="w-fit text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Right */}
+          <div className="flex flex-col gap-2.5">
+            {[
+              { to: "#", label: "개인정보처리방침" },
+              { to: "#", label: "이용약관" },
+              { to: "#", label: "고객센터" },
+              {
+                to: "https://www.seoulmetro.co.kr",
+                label: "서울교통공사 홈페이지",
+                external: true,
+              },
+            ].map((link) =>
+              link.external ? (
+                <a
+                  key={link.label}
+                  href={link.to}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-fit text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  to={link.to}
+                  className="w-fit text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                </Link>
+              ),
+            )}
+          </div>
+        </div>
+
+        {/* Bottom */}
+        <div className="mt-12 border-t border-border pt-6 text-center text-xs text-muted-foreground sm:mt-16">
+          © 2026 Seoul Metro AX. All Rights Reserved.
+        </div>
       </div>
     </footer>
   );
