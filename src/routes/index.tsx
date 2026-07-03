@@ -13,6 +13,8 @@ import {
   Globe,
   Accessibility,
   FileText,
+  CircleDot,
+  Users,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -33,6 +35,14 @@ const shortcuts = [
   { to: "/assistant", icon: Accessibility, label: "교통약자 지원" },
 ] as const;
 
+const recommendedQuestions = [
+  "강남역 막차 알려줘",
+  "유실물 신고하기",
+  "2호선 운행상황",
+  "엘리베이터 있는 역",
+  "민원 접수하기",
+] as const;
+
 const notices = [
   { tag: "안전", title: "여름철 집중호우 대비 안전 안내", summary: "역사 침수 예방 조치 강화, 우천 시 우회 안내, 이용객 대피 경로 사전 확인 권고." },
   { tag: "운행", title: "2호선 강남~잠실 구간 심야 점검", summary: "심야 시간대 일부 열차 지연 예상, 대체 노선 및 버스 연계 안내 제공." },
@@ -48,37 +58,97 @@ function Index() {
     navigate({ to: "/assistant", search: { q } as never });
   };
 
+  const askQuestion = (question: string) => {
+    navigate({ to: "/assistant", search: { q: question } as never });
+  };
+
   return (
     <main>
       {/* Hero */}
       <section className="hero-gradient relative overflow-hidden">
         <div className="mx-auto max-w-6xl px-4 pb-16 pt-16 sm:px-6 sm:pb-24 sm:pt-24">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
+            <span className="inline-flex animate-fade-in items-center gap-2 rounded-full border bg-white/70 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" /> Seoul Metro · AI Service
             </span>
-            <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-6xl md:text-7xl">
-              서울교통공사 <span className="text-gradient">AI 서비스</span>
+            <h1 className="mt-6 animate-fade-in [animation-delay:80ms] [animation-fill-mode:backwards]">
+              <span className="block text-2xl font-medium tracking-tight text-muted-foreground sm:text-3xl">
+                안녕하세요.
+              </span>
+              <span className="mt-2 block text-4xl font-semibold tracking-tight sm:text-6xl md:text-7xl">
+                무엇을 <span className="text-gradient">도와드릴까요?</span>
+              </span>
             </h1>
-            <p className="mt-5 text-lg tracking-tight text-muted-foreground sm:text-2xl">
-              AI가 더 빠르고 편리한 지하철 이용을 도와드립니다.
+            <p className="mt-5 animate-fade-in text-base leading-relaxed tracking-tight text-muted-foreground [animation-delay:160ms] [animation-fill-mode:backwards] sm:text-xl">
+              운행정보, 유실물, 민원, 공지사항까지
+              <br className="hidden sm:block" />
+              <span className="sm:ml-1">AI에게 자연스럽게 질문해보세요.</span>
             </p>
 
-            <form onSubmit={submit} className="glass-card mx-auto mt-10 flex max-w-2xl items-center gap-2 rounded-2xl p-2">
+            <form
+              onSubmit={submit}
+              className="glass-card mx-auto mt-10 flex max-w-2xl animate-fade-in items-center gap-2 rounded-2xl p-3 [animation-delay:240ms] [animation-fill-mode:backwards]"
+            >
               <Search className="ml-3 h-5 w-5 shrink-0 text-muted-foreground" />
               <input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="무엇이든 물어보세요. 예) 강남역에서 우산을 잃어버렸어요"
-                className="min-w-0 flex-1 bg-transparent px-2 py-2.5 text-sm outline-none sm:text-base"
+                placeholder="예) 강남역 막차 시간 알려줘"
+                className="min-w-0 flex-1 bg-transparent px-2 py-3.5 text-sm outline-none sm:text-base"
               />
               <button
                 type="submit"
-                className="shrink-0 rounded-xl bg-[image:var(--gradient-primary)] px-4 py-2.5 text-sm font-medium text-white shadow-[var(--shadow-glow)] transition hover:opacity-90"
+                className="shrink-0 rounded-xl bg-[image:var(--gradient-primary)] px-5 py-3 text-sm font-medium text-white shadow-[var(--shadow-glow)] transition hover:opacity-90"
               >
                 AI에게 묻기
               </button>
             </form>
+
+            {/* Recommended questions */}
+            <div className="mx-auto mt-6 max-w-2xl animate-fade-in [animation-delay:320ms] [animation-fill-mode:backwards]">
+              <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <div className="flex w-max gap-2 pb-1">
+                  {recommendedQuestions.map((question) => (
+                    <button
+                      key={question}
+                      type="button"
+                      onClick={() => askQuestion(question)}
+                      className="shrink-0 rounded-full border bg-white/70 px-4 py-2 text-xs font-medium text-foreground/80 backdrop-blur transition hover:border-primary/40 hover:bg-white hover:text-primary sm:text-sm"
+                    >
+                      {question}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Live status card */}
+            <div className="mx-auto mt-8 max-w-2xl animate-fade-in [animation-delay:400ms] [animation-fill-mode:backwards]">
+              <div className="glass-card rounded-2xl p-5 text-left">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                    오늘의 운행현황
+                  </p>
+                  <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+                    <Clock className="h-3 w-3" /> 실시간
+                  </span>
+                </div>
+                <ul className="mt-3 space-y-2 text-sm">
+                  <li className="flex items-center gap-2">
+                    <CircleDot className="h-3.5 w-3.5 text-emerald-500" />
+                    <span>대부분 노선 정상 운행</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CircleDot className="h-3.5 w-3.5 text-amber-500" />
+                    <span>2호선 일부 구간 약 3분 지연</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Users className="h-3.5 w-3.5 text-primary" />
+                    <span>주요 환승역 혼잡도 보통</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>
