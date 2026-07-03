@@ -55,13 +55,13 @@ function Index() {
         <div className="mx-auto max-w-6xl px-4 pb-16 pt-16 sm:px-6 sm:pb-24 sm:pt-24">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" /> Seoul Metro · AX Renewal
+              <Sparkles className="h-3.5 w-3.5" /> Seoul Metro · AI Service
             </span>
             <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-6xl md:text-7xl">
-              서울교통공사 <span className="text-gradient">AX 홈페이지</span>
+              서울교통공사 <span className="text-gradient">AI 서비스</span>
             </h1>
             <p className="mt-5 text-lg tracking-tight text-muted-foreground sm:text-2xl">
-              찾는 홈페이지에서 <span className="font-semibold text-foreground">해결해주는 홈페이지</span>로.
+              AI가 더 빠르고 편리한 지하철 이용을 도와드립니다.
             </p>
 
             <form onSubmit={submit} className="glass-card mx-auto mt-10 flex max-w-2xl items-center gap-2 rounded-2xl p-2">
