@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitRouteImport } from './routes/transit'
+import { Route as StationFacilitiesRouteImport } from './routes/station-facilities'
 import { Route as NoticeRouteImport } from './routes/notice'
 import { Route as MyMetroRouteImport } from './routes/my-metro'
 import { Route as LostFoundRouteImport } from './routes/lost-found'
@@ -21,6 +22,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TransitRoute = TransitRouteImport.update({
   id: '/transit',
   path: '/transit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StationFacilitiesRoute = StationFacilitiesRouteImport.update({
+  id: '/station-facilities',
+  path: '/station-facilities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NoticeRoute = NoticeRouteImport.update({
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/lost-found': typeof LostFoundRoute
   '/my-metro': typeof MyMetroRoute
   '/notice': typeof NoticeRoute
+  '/station-facilities': typeof StationFacilitiesRoute
   '/transit': typeof TransitRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/lost-found': typeof LostFoundRoute
   '/my-metro': typeof MyMetroRoute
   '/notice': typeof NoticeRoute
+  '/station-facilities': typeof StationFacilitiesRoute
   '/transit': typeof TransitRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/lost-found': typeof LostFoundRoute
   '/my-metro': typeof MyMetroRoute
   '/notice': typeof NoticeRoute
+  '/station-facilities': typeof StationFacilitiesRoute
   '/transit': typeof TransitRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/lost-found'
     | '/my-metro'
     | '/notice'
+    | '/station-facilities'
     | '/transit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/lost-found'
     | '/my-metro'
     | '/notice'
+    | '/station-facilities'
     | '/transit'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/lost-found'
     | '/my-metro'
     | '/notice'
+    | '/station-facilities'
     | '/transit'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   LostFoundRoute: typeof LostFoundRoute
   MyMetroRoute: typeof MyMetroRoute
   NoticeRoute: typeof NoticeRoute
+  StationFacilitiesRoute: typeof StationFacilitiesRoute
   TransitRoute: typeof TransitRoute
 }
 
@@ -141,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/transit'
       fullPath: '/transit'
       preLoaderRoute: typeof TransitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/station-facilities': {
+      id: '/station-facilities'
+      path: '/station-facilities'
+      fullPath: '/station-facilities'
+      preLoaderRoute: typeof StationFacilitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notice': {
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   LostFoundRoute: LostFoundRoute,
   MyMetroRoute: MyMetroRoute,
   NoticeRoute: NoticeRoute,
+  StationFacilitiesRoute: StationFacilitiesRoute,
   TransitRoute: TransitRoute,
 }
 export const routeTree = rootRouteImport
