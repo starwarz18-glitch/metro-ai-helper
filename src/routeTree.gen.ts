@@ -10,9 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitRouteImport } from './routes/transit'
+import { Route as StationFacilitiesRouteImport } from './routes/station-facilities'
 import { Route as NoticeRouteImport } from './routes/notice'
 import { Route as MyMetroRouteImport } from './routes/my-metro'
 import { Route as LostFoundRouteImport } from './routes/lost-found'
+import { Route as DelayCertificateRouteImport } from './routes/delay-certificate'
 import { Route as ComplaintRouteImport } from './routes/complaint'
 import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as IndexRouteImport } from './routes/index'
@@ -20,6 +22,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TransitRoute = TransitRouteImport.update({
   id: '/transit',
   path: '/transit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StationFacilitiesRoute = StationFacilitiesRouteImport.update({
+  id: '/station-facilities',
+  path: '/station-facilities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NoticeRoute = NoticeRouteImport.update({
@@ -35,6 +42,11 @@ const MyMetroRoute = MyMetroRouteImport.update({
 const LostFoundRoute = LostFoundRouteImport.update({
   id: '/lost-found',
   path: '/lost-found',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DelayCertificateRoute = DelayCertificateRouteImport.update({
+  id: '/delay-certificate',
+  path: '/delay-certificate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComplaintRoute = ComplaintRouteImport.update({
@@ -57,18 +69,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assistant': typeof AssistantRoute
   '/complaint': typeof ComplaintRoute
+  '/delay-certificate': typeof DelayCertificateRoute
   '/lost-found': typeof LostFoundRoute
   '/my-metro': typeof MyMetroRoute
   '/notice': typeof NoticeRoute
+  '/station-facilities': typeof StationFacilitiesRoute
   '/transit': typeof TransitRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assistant': typeof AssistantRoute
   '/complaint': typeof ComplaintRoute
+  '/delay-certificate': typeof DelayCertificateRoute
   '/lost-found': typeof LostFoundRoute
   '/my-metro': typeof MyMetroRoute
   '/notice': typeof NoticeRoute
+  '/station-facilities': typeof StationFacilitiesRoute
   '/transit': typeof TransitRoute
 }
 export interface FileRoutesById {
@@ -76,9 +92,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/assistant': typeof AssistantRoute
   '/complaint': typeof ComplaintRoute
+  '/delay-certificate': typeof DelayCertificateRoute
   '/lost-found': typeof LostFoundRoute
   '/my-metro': typeof MyMetroRoute
   '/notice': typeof NoticeRoute
+  '/station-facilities': typeof StationFacilitiesRoute
   '/transit': typeof TransitRoute
 }
 export interface FileRouteTypes {
@@ -87,27 +105,33 @@ export interface FileRouteTypes {
     | '/'
     | '/assistant'
     | '/complaint'
+    | '/delay-certificate'
     | '/lost-found'
     | '/my-metro'
     | '/notice'
+    | '/station-facilities'
     | '/transit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/assistant'
     | '/complaint'
+    | '/delay-certificate'
     | '/lost-found'
     | '/my-metro'
     | '/notice'
+    | '/station-facilities'
     | '/transit'
   id:
     | '__root__'
     | '/'
     | '/assistant'
     | '/complaint'
+    | '/delay-certificate'
     | '/lost-found'
     | '/my-metro'
     | '/notice'
+    | '/station-facilities'
     | '/transit'
   fileRoutesById: FileRoutesById
 }
@@ -115,9 +139,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AssistantRoute: typeof AssistantRoute
   ComplaintRoute: typeof ComplaintRoute
+  DelayCertificateRoute: typeof DelayCertificateRoute
   LostFoundRoute: typeof LostFoundRoute
   MyMetroRoute: typeof MyMetroRoute
   NoticeRoute: typeof NoticeRoute
+  StationFacilitiesRoute: typeof StationFacilitiesRoute
   TransitRoute: typeof TransitRoute
 }
 
@@ -128,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/transit'
       fullPath: '/transit'
       preLoaderRoute: typeof TransitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/station-facilities': {
+      id: '/station-facilities'
+      path: '/station-facilities'
+      fullPath: '/station-facilities'
+      preLoaderRoute: typeof StationFacilitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notice': {
@@ -149,6 +182,13 @@ declare module '@tanstack/react-router' {
       path: '/lost-found'
       fullPath: '/lost-found'
       preLoaderRoute: typeof LostFoundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/delay-certificate': {
+      id: '/delay-certificate'
+      path: '/delay-certificate'
+      fullPath: '/delay-certificate'
+      preLoaderRoute: typeof DelayCertificateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/complaint': {
@@ -179,9 +219,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AssistantRoute: AssistantRoute,
   ComplaintRoute: ComplaintRoute,
+  DelayCertificateRoute: DelayCertificateRoute,
   LostFoundRoute: LostFoundRoute,
   MyMetroRoute: MyMetroRoute,
   NoticeRoute: NoticeRoute,
+  StationFacilitiesRoute: StationFacilitiesRoute,
   TransitRoute: TransitRoute,
 }
 export const routeTree = rootRouteImport

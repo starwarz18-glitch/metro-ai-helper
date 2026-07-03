@@ -12,6 +12,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteNav, SiteFooter } from "@/components/site-nav";
+import { LanguageProvider } from "@/lib/language";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -124,11 +126,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-background">
-        <SiteNav />
-        <Outlet />
-        <SiteFooter />
-      </div>
+      <LanguageProvider>
+        <div className="min-h-screen bg-background">
+          <SiteNav />
+          <Outlet />
+          <SiteFooter />
+        </div>
+        <Toaster />
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

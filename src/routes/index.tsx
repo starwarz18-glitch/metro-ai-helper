@@ -15,7 +15,12 @@ import {
   FileText,
   CircleDot,
   Users,
+  FileCheck2,
+  Building2,
+  ShieldAlert,
+  AlertTriangle,
 } from "lucide-react";
+import { useLanguage } from "@/lib/language";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -24,8 +29,12 @@ export const Route = createFileRoute("/")({
 const services = [
   { to: "/assistant", title: "AI Assistant", desc: "자연어로 물어보면 AI가 바로 해결해 드려요.", icon: Sparkles },
   { to: "/transit", title: "실시간 운행 안내", desc: "혼잡도·지연·추천 경로까지 한눈에.", icon: Train },
-  { to: "/lost-found", title: "유실물 AI 검색", desc: "물건·역·날짜로 AI가 유사 항목을 찾아줘요.", icon: Umbrella },
+  { to: "/delay-certificate", title: "지연증명서 신청/조회", desc: "지연 내역 조회부터 증명서 발급까지.", icon: FileCheck2 },
+  { to: "/lost-found", title: "유실물 찾기", desc: "AI가 유사한 유실물을 즉시 매칭합니다.", icon: Umbrella },
+  { to: "/station-facilities", title: "역별 편의시설 검색", desc: "엘리베이터·화장실·수유실 위치 확인.", icon: Building2 },
   { to: "/complaint", title: "AI 민원 접수", desc: "말씀만 하시면 AI가 민원서를 작성합니다.", icon: MessageSquareText },
+  { to: "/notice", title: "공지사항/안전알림", desc: "긴 공지도 3줄로 요약, 안전알림도 한곳에서.", icon: ShieldAlert },
+  { to: "/assistant", title: "다국어 안내", desc: "한국어·English·日本語·中文 지원.", icon: Globe },
 ] as const;
 
 const shortcuts = [
@@ -43,15 +52,29 @@ const recommendedQuestions = [
   "민원 접수하기",
 ] as const;
 
-const notices = [
-  { tag: "안전", title: "여름철 집중호우 대비 안전 안내", summary: "역사 침수 예방 조치 강화, 우천 시 우회 안내, 이용객 대피 경로 사전 확인 권고." },
-  { tag: "운행", title: "2호선 강남~잠실 구간 심야 점검", summary: "심야 시간대 일부 열차 지연 예상, 대체 노선 및 버스 연계 안내 제공." },
-  { tag: "채용", title: "2026년 하반기 사회형평 채용", summary: "신입·경력 공채 접수 시작, 온라인 설명회 개최, 지원 자격 및 우대 사항 안내." },
+const notices: {
+  tag: "안전" | "운행" | "혼잡" | "시설";
+  level: "긴급" | "중요" | "일반";
+  date: string;
+  title: string;
+  summary: string;
+}[] = [
+  { tag: "안전", level: "긴급", date: "2026.07.03", title: "여름철 집중호우 대비 안전 안내", summary: "역사 침수 예방 조치 강화. 우천 시 우회 경로 안내. 이용객 대피 경로 사전 확인 권고." },
+  { tag: "운행", level: "중요", date: "2026.07.03", title: "2호선 강남~잠실 구간 심야 점검", summary: "심야 시간대 일부 열차 지연 예상. 대체 노선 및 버스 연계 안내 제공. 승강장 안내방송 강화." },
+  { tag: "혼잡", level: "일반", date: "2026.07.02", title: "출근 시간대 주요 환승역 혼잡 안내", summary: "사당·잠실·고속터미널 혼잡도 상승. 열차 간격 임시 조정. 대체 출입구 이용 권장." },
+  { tag: "시설", level: "중요", date: "2026.07.02", title: "종로3가역 엘리베이터 임시 운영 중단", summary: "노후 부품 교체 작업 진행. 대체 이동 경로 안내. 교통약자 도우미 인력 배치." },
 ];
+
+const levelTone: Record<string, string> = {
+  긴급: "bg-red-100 text-red-700",
+  중요: "bg-amber-100 text-amber-700",
+  일반: "bg-secondary text-foreground/70",
+};
 
 function Index() {
   const [q, setQ] = useState("");
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,7 +123,7 @@ function Index() {
                 type="submit"
                 className="shrink-0 rounded-xl bg-[image:var(--gradient-primary)] px-5 py-3 text-sm font-medium text-white shadow-[var(--shadow-glow)] transition hover:opacity-90"
               >
-                AI에게 묻기
+                {t("askAI")}
               </button>
             </form>
 
@@ -199,22 +222,28 @@ function Index() {
       <section className="mx-auto mt-16 max-w-6xl px-4 sm:px-6">
         <div className="mb-5 flex items-end justify-between">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">공지사항 AI 요약</h2>
-            <p className="mt-1 text-sm text-muted-foreground">긴 공지도 3줄로 요약해서 보여드려요.</p>
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">공지사항 · 안전알림</h2>
+            <p className="mt-1 text-sm text-muted-foreground">긴 공지도 AI가 3줄로 요약. 중요도와 함께 한눈에.</p>
           </div>
           <Link to="/notice" className="text-sm text-primary hover:underline">전체보기 →</Link>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           {notices.map((n) => (
             <article key={n.title} className="rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
               <div className="flex items-center justify-between">
-                <span className="rounded-full bg-primary-soft px-2.5 py-1 text-xs font-medium text-primary">{n.tag}</span>
-                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><Clock className="h-3 w-3" /> 오늘</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="rounded-full bg-primary-soft px-2.5 py-1 text-xs font-medium text-primary">{n.tag}</span>
+                  <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${levelTone[n.level]}`}>
+                    {n.level === "긴급" && <AlertTriangle className="h-2.5 w-2.5" />}
+                    {n.level}
+                  </span>
+                </div>
+                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><Clock className="h-3 w-3" /> {n.date}</span>
               </div>
               <h3 className="mt-4 text-base font-semibold leading-snug">{n.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{n.summary}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-4">{n.summary}</p>
               <Link to="/notice" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                <FileText className="h-4 w-4" /> AI 요약 보기
+                <FileText className="h-4 w-4" /> 자세히 보기
               </Link>
             </article>
           ))}

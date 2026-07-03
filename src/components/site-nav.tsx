@@ -1,7 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X, Train } from "lucide-react";
+import { Menu, X, Train, Globe, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { LANGS, useLanguage } from "@/lib/language";
 
 const links = [
   { to: "/", label: "Home" },
@@ -15,7 +16,10 @@ const links = [
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { lang, setLang } = useLanguage();
+  const current = LANGS.find((l) => l.code === lang)!;
 
   return (
     <header className="sticky top-0 z-50 w-full">
@@ -40,13 +44,43 @@ export function SiteNav() {
             </Link>
           ))}
         </nav>
-        <button
-          className="rounded-full p-2 lg:hidden"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="menu"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-1">
+          <div className="relative">
+            <button
+              onClick={() => setLangOpen((v) => !v)}
+              className="inline-flex items-center gap-1.5 rounded-full border bg-white/70 px-3 py-1.5 text-xs font-medium text-foreground/80 backdrop-blur hover:border-primary/40 hover:text-primary"
+              aria-label="language"
+            >
+              <Globe className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{current.label}</span>
+              <span className="sm:hidden">{current.code.toUpperCase()}</span>
+            </button>
+            {langOpen && (
+              <div className="absolute right-0 top-full z-50 mt-2 w-40 overflow-hidden rounded-2xl border bg-white shadow-lg">
+                {LANGS.map((l) => (
+                  <button
+                    key={l.code}
+                    onClick={() => { setLang(l.code); setLangOpen(false); }}
+                    className={cn(
+                      "flex w-full items-center justify-between px-4 py-2.5 text-sm hover:bg-secondary",
+                      l.code === lang && "text-primary",
+                    )}
+                  >
+                    {l.label}
+                    {l.code === lang && <Check className="h-4 w-4" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <button
+            className="rounded-full p-2 lg:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
       {open && (
         <div className="glass-card mx-auto mt-2 flex max-w-6xl flex-col gap-1 rounded-2xl p-3 lg:hidden">

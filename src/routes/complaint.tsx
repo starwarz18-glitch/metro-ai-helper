@@ -2,10 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Sparkles, CheckCircle2 } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { toast } from "sonner";
+
+const TYPES = ["운행 지연", "역사 시설", "직원 응대", "안전 신고", "기타"] as const;
+type ComplaintType = (typeof TYPES)[number];
 
 export const Route = createFileRoute("/complaint")({ component: ComplaintPage });
 
 function ComplaintPage() {
+  const [type, setType] = useState<ComplaintType>("역사 시설");
   const [text, setText] = useState("어제 저녁 7시경 2호선 강남역 승강장 에스컬레이터가 멈춰 있어서 큰 짐을 든 어르신이 이용에 어려움을 겪었습니다.");
   const [draft, setDraft] = useState<null | { title: string; category: string; dept: string; summary: string }>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -14,9 +19,16 @@ function ComplaintPage() {
     setSubmitted(false);
     setDraft({
       title: "강남역 에스컬레이터 운영 중단 관련 개선 요청",
-      category: "역사 시설 · 편의시설",
+      category: `${type} · 편의시설`,
       dept: "강남관리역 시설관리팀",
       summary: "2호선 강남역 승강장 에스컬레이터 미운영으로 교통약자의 이동 불편이 발생함. 신속한 점검 및 임시 안내 표지 설치를 요청합니다.",
+    });
+  };
+
+  const submit = () => {
+    setSubmitted(true);
+    toast.success("민원이 접수되었습니다", {
+      description: "접수번호 SM-2026-070312 · 3영업일 이내 회신드립니다.",
     });
   };
 
@@ -24,7 +36,24 @@ function ComplaintPage() {
     <PageShell eyebrow="AI 민원 접수" title="말씀만 하시면 AI가 대신 씁니다" subtitle="상황을 편하게 입력하면 민원 제목·분류·담당부서·요약을 자동 생성합니다.">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="glass-card rounded-3xl p-5">
-          <label className="text-xs font-medium text-muted-foreground">불편사항</label>
+          <label className="text-xs font-medium text-muted-foreground">민원 유형</label>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {TYPES.map((t) => (
+              <button
+                key={t}
+                onClick={() => setType(t)}
+                className={
+                  "rounded-full border px-3.5 py-1.5 text-xs font-medium transition " +
+                  (type === t
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "bg-white text-foreground/80 hover:border-primary/40 hover:text-primary")
+                }
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+          <label className="mt-5 block text-xs font-medium text-muted-foreground">불편사항</label>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -50,7 +79,7 @@ function ComplaintPage() {
               <Row k="담당 부서" v={draft.dept} />
               <Row k="요약 내용" v={draft.summary} />
               <button
-                onClick={() => setSubmitted(true)}
+                onClick={submit}
                 className="mt-2 w-full rounded-2xl bg-primary py-3 text-sm font-medium text-primary-foreground hover:opacity-90"
               >
                 접수하기
