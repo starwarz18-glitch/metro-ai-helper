@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitRouteImport } from './routes/transit'
+import { Route as NoticeRouteImport } from './routes/notice'
 import { Route as LostFoundRouteImport } from './routes/lost-found'
 import { Route as ComplaintRouteImport } from './routes/complaint'
 import { Route as AssistantRouteImport } from './routes/assistant'
@@ -18,6 +19,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TransitRoute = TransitRouteImport.update({
   id: '/transit',
   path: '/transit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticeRoute = NoticeRouteImport.update({
+  id: '/notice',
+  path: '/notice',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LostFoundRoute = LostFoundRouteImport.update({
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/assistant': typeof AssistantRoute
   '/complaint': typeof ComplaintRoute
   '/lost-found': typeof LostFoundRoute
+  '/notice': typeof NoticeRoute
   '/transit': typeof TransitRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/assistant': typeof AssistantRoute
   '/complaint': typeof ComplaintRoute
   '/lost-found': typeof LostFoundRoute
+  '/notice': typeof NoticeRoute
   '/transit': typeof TransitRoute
 }
 export interface FileRoutesById {
@@ -61,19 +69,27 @@ export interface FileRoutesById {
   '/assistant': typeof AssistantRoute
   '/complaint': typeof ComplaintRoute
   '/lost-found': typeof LostFoundRoute
+  '/notice': typeof NoticeRoute
   '/transit': typeof TransitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/assistant' | '/complaint' | '/lost-found' | '/transit'
+  fullPaths:
+    | '/'
+    | '/assistant'
+    | '/complaint'
+    | '/lost-found'
+    | '/notice'
+    | '/transit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assistant' | '/complaint' | '/lost-found' | '/transit'
+  to: '/' | '/assistant' | '/complaint' | '/lost-found' | '/notice' | '/transit'
   id:
     | '__root__'
     | '/'
     | '/assistant'
     | '/complaint'
     | '/lost-found'
+    | '/notice'
     | '/transit'
   fileRoutesById: FileRoutesById
 }
@@ -82,6 +98,7 @@ export interface RootRouteChildren {
   AssistantRoute: typeof AssistantRoute
   ComplaintRoute: typeof ComplaintRoute
   LostFoundRoute: typeof LostFoundRoute
+  NoticeRoute: typeof NoticeRoute
   TransitRoute: typeof TransitRoute
 }
 
@@ -92,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/transit'
       fullPath: '/transit'
       preLoaderRoute: typeof TransitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notice': {
+      id: '/notice'
+      path: '/notice'
+      fullPath: '/notice'
+      preLoaderRoute: typeof NoticeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lost-found': {
@@ -130,6 +154,7 @@ const rootRouteChildren: RootRouteChildren = {
   AssistantRoute: AssistantRoute,
   ComplaintRoute: ComplaintRoute,
   LostFoundRoute: LostFoundRoute,
+  NoticeRoute: NoticeRoute,
   TransitRoute: TransitRoute,
 }
 export const routeTree = rootRouteImport
