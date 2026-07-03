@@ -151,46 +151,6 @@ function Index() {
         </div>
       </section>
 
-      {/* About project */}
-      <section id="about" className="mx-auto mt-20 max-w-6xl px-4 sm:px-6">
-        <div className="rounded-3xl border bg-[image:var(--gradient-hero)] p-6 sm:p-10">
-          <p className="text-sm font-medium text-primary">About Project</p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-4xl">시민 중심 AX, 왜 필요한가</h2>
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                t: "문제정의",
-                items: ["정보 과잉·탐색 난이도", "메뉴 중심 정보 제공", "빠른 문제 해결 요구"],
-              },
-              {
-                t: "핵심 사용자",
-                items: ["출퇴근 시민", "외국인 관광객", "고령자·교통약자", "내부 직원"],
-              },
-              {
-                t: "Pain Point",
-                items: ["복잡한 메뉴", "긴 공지·어려운 표현", "번거로운 민원", "반복 문의 업무 부담"],
-              },
-              {
-                t: "AX 적용 포인트",
-                items: ["AI Assistant", "AI 공지 요약", "AI 민원 자동 작성", "유실물·경로 추천·다국어"],
-              },
-            ].map((b) => (
-              <div key={b.t} className="rounded-2xl bg-white/70 p-5 backdrop-blur">
-                <p className="text-sm font-semibold text-primary">{b.t}</p>
-                <ul className="mt-3 space-y-1.5 text-sm text-foreground/80">
-                  {b.items.map((i) => <li key={i}>· {i}</li>)}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div className="mt-8 rounded-2xl bg-white/70 p-5 backdrop-blur">
-            <p className="text-sm font-semibold text-primary">기대효과</p>
-            <p className="mt-2 text-sm text-foreground/80">
-              시민 검색 시간 감소 · 민원 접수 편의성 향상 · 전화 문의 감소 · 교통약자 접근성 개선 · 내부 업무 자동화 · 서울교통공사 AX 전환 이미지 강화.
-            </p>
-          </div>
-        </div>
-      </section>
     </main>
   );
 }
