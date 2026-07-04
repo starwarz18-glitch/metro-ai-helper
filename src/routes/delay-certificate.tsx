@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { FileCheck2, Search, Download, CheckCircle2, Clock, Train } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { useLanguage } from "@/lib/language";
 
 export const Route = createFileRoute("/delay-certificate")({ component: DelayPage });
 
@@ -18,11 +19,13 @@ function DelayPage() {
     setResult({ minutes: 5, issuedAt: "07:42" });
   };
 
+  const { t } = useLanguage();
+
   return (
     <PageShell
-      eyebrow="지연증명서 신청/조회"
-      title="열차 지연, 몇 번의 클릭으로 증명"
-      subtitle="열차 지연 내역을 조회하고 증명서를 즉시 확인할 수 있습니다."
+      eyebrow={t("pDelayEyebrow")}
+      title={t("pDelayTitle")}
+      subtitle={t("pDelaySub")}
     >
       <div className="glass-card grid grid-cols-1 gap-3 rounded-3xl p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-4">
         <Field label="날짜" value={date} onChange={setDate} type="date" />

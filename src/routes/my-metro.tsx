@@ -1,12 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Bell, Bookmark, History, MapPin, TrainTrack, Umbrella } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { useLanguage } from "@/lib/language";
 
 export const Route = createFileRoute("/my-metro")({ component: MyMetroPage });
 
 function MyMetroPage() {
+  const { t } = useLanguage();
+
   return (
-    <PageShell eyebrow="My Metro" title="당신의 지하철, 개인 맞춤 대시보드" subtitle="자주 이용하는 노선과 관심 역, 알림을 한 곳에서 관리하세요.">
+    <PageShell eyebrow={t("pMyEyebrow")} title={t("pMyTitle")} subtitle={t("pMySub")}>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card icon={TrainTrack} title="자주 이용하는 노선">
           <div className="mt-3 flex flex-wrap gap-2 text-sm">

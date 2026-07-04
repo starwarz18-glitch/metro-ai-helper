@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Sparkles, Send, ArrowRight, Bot, User } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { useLanguage } from "@/lib/language";
 
 type SearchParams = { q?: string };
 
@@ -74,8 +75,10 @@ function AssistantPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q]);
 
+  const { t } = useLanguage();
+
   return (
-    <PageShell eyebrow="AI Assistant" title="무엇이든 물어보세요" subtitle="자연어로 대화하면 AI가 서울 지하철 이용을 도와드립니다.">
+    <PageShell eyebrow={t("pAssistantEyebrow")} title={t("pAssistantTitle")} subtitle={t("pAssistantSub")}>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <div className="glass-card flex min-h-[520px] flex-col rounded-3xl p-4 sm:p-6">
           <div className="flex-1 space-y-4 overflow-y-auto">

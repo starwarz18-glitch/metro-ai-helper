@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Search, Umbrella, Headphones, Wallet, X, MapPin, Calendar, Package } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { useLanguage } from "@/lib/language";
 
 export const Route = createFileRoute("/lost-found")({ component: LostFoundPage });
 
@@ -34,8 +35,10 @@ function LostFoundPage() {
   const [shown, setShown] = useState(false);
   const [detail, setDetail] = useState<Result | null>(null);
 
+  const { t } = useLanguage();
+
   return (
-    <PageShell eyebrow="유실물 AI 검색" title="잃어버린 물건, AI가 찾아드립니다" subtitle="물건·역·날짜를 입력하면 유사한 유실물을 즉시 매칭해요.">
+    <PageShell eyebrow={t("pLostEyebrow")} title={t("pLostTitle")} subtitle={t("pLostSub")}>
       <div className="glass-card grid grid-cols-1 gap-3 rounded-3xl p-4 sm:grid-cols-3 sm:p-5">
         <Field label="잃어버린 물건" value={item} onChange={setItem} />
         <Field label="역명" value={station} onChange={setStation} />
