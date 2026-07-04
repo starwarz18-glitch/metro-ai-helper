@@ -20,37 +20,31 @@ import {
   ShieldAlert,
   AlertTriangle,
 } from "lucide-react";
-import { useLanguage } from "@/lib/language";
+import { useLanguage, type TKey } from "@/lib/language";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const services = [
-  { to: "/assistant", title: "AI Assistant", desc: "자연어로 물어보면 AI가 바로 해결해 드려요.", icon: Sparkles },
-  { to: "/transit", title: "실시간 운행 안내", desc: "혼잡도·지연·추천 경로까지 한눈에.", icon: Train },
-  { to: "/delay-certificate", title: "지연증명서 신청/조회", desc: "지연 내역 조회부터 증명서 발급까지.", icon: FileCheck2 },
-  { to: "/lost-found", title: "유실물 찾기", desc: "AI가 유사한 유실물을 즉시 매칭합니다.", icon: Umbrella },
-  { to: "/station-facilities", title: "역별 편의시설 검색", desc: "엘리베이터·화장실·수유실 위치 확인.", icon: Building2 },
-  { to: "/complaint", title: "AI 민원 접수", desc: "말씀만 하시면 AI가 민원서를 작성합니다.", icon: MessageSquareText },
-  { to: "/notice", title: "공지사항/안전알림", desc: "긴 공지도 3줄로 요약, 안전알림도 한곳에서.", icon: ShieldAlert },
-  { to: "/assistant", title: "다국어 안내", desc: "한국어·English·日本語·中文 지원.", icon: Globe },
-] as const;
+const services: { to: string; titleKey: TKey; descKey: TKey; icon: typeof Sparkles }[] = [
+  { to: "/assistant", titleKey: "svc1Title", descKey: "svc1Desc", icon: Sparkles },
+  { to: "/transit", titleKey: "svc2Title", descKey: "svc2Desc", icon: Train },
+  { to: "/delay-certificate", titleKey: "svc3Title", descKey: "svc3Desc", icon: FileCheck2 },
+  { to: "/lost-found", titleKey: "svc4Title", descKey: "svc4Desc", icon: Umbrella },
+  { to: "/station-facilities", titleKey: "svc5Title", descKey: "svc5Desc", icon: Building2 },
+  { to: "/complaint", titleKey: "svc6Title", descKey: "svc6Desc", icon: MessageSquareText },
+  { to: "/notice", titleKey: "svc7Title", descKey: "svc7Desc", icon: ShieldAlert },
+  { to: "/assistant", titleKey: "svc8Title", descKey: "svc8Desc", icon: Globe },
+];
 
-const shortcuts = [
-  { to: "/transit", icon: MapPin, label: "지하철 노선도" },
-  { to: "/assistant", icon: Globe, label: "외국인 안내" },
-  { to: "/my-metro", icon: Bell, label: "맞춤 알림" },
-  { to: "/assistant", icon: Accessibility, label: "교통약자 지원" },
-] as const;
+const shortcuts: { to: string; icon: typeof MapPin; labelKey: TKey }[] = [
+  { to: "/transit", icon: MapPin, labelKey: "shortcut1" },
+  { to: "/assistant", icon: Globe, labelKey: "shortcut2" },
+  { to: "/my-metro", icon: Bell, labelKey: "shortcut3" },
+  { to: "/assistant", icon: Accessibility, labelKey: "shortcut4" },
+];
 
-const recommendedQuestions = [
-  "강남역 막차 알려줘",
-  "유실물 신고하기",
-  "2호선 운행상황",
-  "엘리베이터 있는 역",
-  "민원 접수하기",
-] as const;
+const recommendedKeys: TKey[] = ["reco1", "reco2", "reco3", "reco4", "reco5"];
 
 const notices: {
   tag: "안전" | "운행" | "혼잡" | "시설";
@@ -92,20 +86,20 @@ function Index() {
         <div className="mx-auto max-w-6xl px-4 pb-16 pt-16 sm:px-6 sm:pb-24 sm:pt-24">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex animate-fade-in items-center gap-2 rounded-full border bg-white/70 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" /> Seoul Metro · AI Service
+              <Sparkles className="h-3.5 w-3.5" /> {t("heroBadge")}
             </span>
             <h1 className="mt-6 animate-fade-in [animation-delay:80ms] [animation-fill-mode:backwards]">
               <span className="block text-2xl font-medium tracking-tight text-muted-foreground sm:text-3xl">
-                안녕하세요.
+                {t("greetingHi")}
               </span>
               <span className="mt-2 block text-4xl font-semibold tracking-tight sm:text-6xl md:text-7xl">
-                무엇을 <span className="text-gradient">도와드릴까요?</span>
+                <span className="text-gradient">{t("greetingHelp")}</span>
               </span>
             </h1>
             <p className="mt-5 animate-fade-in text-base leading-relaxed tracking-tight text-muted-foreground [animation-delay:160ms] [animation-fill-mode:backwards] sm:text-xl">
-              운행정보, 유실물, 민원, 공지사항까지
+              {t("heroSubtitleA")}
               <br className="hidden sm:block" />
-              <span className="sm:ml-1">AI에게 자연스럽게 질문해보세요.</span>
+              <span className="sm:ml-1">{t("heroSubtitleB")}</span>
             </p>
 
             <form
@@ -116,7 +110,7 @@ function Index() {
               <input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="예) 강남역 막차 시간 알려줘"
+                placeholder={t("searchPlaceholder")}
                 className="min-w-0 flex-1 bg-transparent px-2 py-3.5 text-sm outline-none sm:text-base"
               />
               <button
@@ -131,16 +125,19 @@ function Index() {
             <div className="mx-auto mt-6 max-w-2xl animate-fade-in [animation-delay:320ms] [animation-fill-mode:backwards]">
               <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <div className="flex w-max gap-2 pb-1">
-                  {recommendedQuestions.map((question) => (
+                  {recommendedKeys.map((k) => {
+                    const question = t(k);
+                    return (
                     <button
-                      key={question}
+                      key={k}
                       type="button"
                       onClick={() => askQuestion(question)}
                       className="shrink-0 rounded-full border bg-white/70 px-4 py-2 text-xs font-medium text-foreground/80 backdrop-blur transition hover:border-primary/40 hover:bg-white hover:text-primary sm:text-sm"
                     >
                       {question}
                     </button>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -150,24 +147,24 @@ function Index() {
               <div className="glass-card rounded-2xl p-5 text-left">
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-                    오늘의 운행현황
+                    {t("statusTitle")}
                   </p>
                   <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-                    <Clock className="h-3 w-3" /> 실시간
+                    <Clock className="h-3 w-3" /> {t("statusLive")}
                   </span>
                 </div>
                 <ul className="mt-3 space-y-2 text-sm">
                   <li className="flex items-center gap-2">
                     <CircleDot className="h-3.5 w-3.5 text-emerald-500" />
-                    <span>대부분 노선 정상 운행</span>
+                    <span>{t("statusNormal")}</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CircleDot className="h-3.5 w-3.5 text-amber-500" />
-                    <span>2호선 일부 구간 약 3분 지연</span>
+                    <span>{t("statusDelay")}</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Users className="h-3.5 w-3.5 text-primary" />
-                    <span>주요 환승역 혼잡도 보통</span>
+                    <span>{t("statusCrowd")}</span>
                   </li>
                 </ul>
               </div>
@@ -181,17 +178,17 @@ function Index() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((s) => (
             <Link
-              key={s.title}
+              key={s.titleKey}
               to={s.to}
               className="group relative overflow-hidden rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)] transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]"
             >
               <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[image:var(--gradient-primary)] text-white">
                 <s.icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-5 text-lg font-semibold tracking-tight">{s.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{s.desc}</p>
+              <h3 className="mt-5 text-lg font-semibold tracking-tight">{t(s.titleKey)}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{t(s.descKey)}</p>
               <div className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                바로가기 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                {t("goto")} <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
               </div>
             </Link>
           ))}
@@ -201,18 +198,18 @@ function Index() {
       {/* Shortcuts */}
       <section className="mx-auto mt-16 max-w-6xl px-4 sm:px-6">
         <div className="mb-5 flex items-end justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">시민 맞춤형 바로가기</h2>
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t("shortcutsTitle")}</h2>
           <Link to="/my-metro" className="text-sm text-primary hover:underline">My Metro →</Link>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {shortcuts.map((s) => (
             <Link
-              key={s.label}
+              key={s.labelKey}
               to={s.to}
               className="glass-card flex flex-col items-start gap-3 rounded-2xl p-5 transition hover:-translate-y-0.5"
             >
               <s.icon className="h-5 w-5 text-primary" />
-              <span className="text-sm font-medium">{s.label}</span>
+              <span className="text-sm font-medium">{t(s.labelKey)}</span>
             </Link>
           ))}
         </div>
@@ -222,10 +219,10 @@ function Index() {
       <section className="mx-auto mt-16 max-w-6xl px-4 sm:px-6">
         <div className="mb-5 flex items-end justify-between">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">공지사항 · 안전알림</h2>
-            <p className="mt-1 text-sm text-muted-foreground">긴 공지도 AI가 3줄로 요약. 중요도와 함께 한눈에.</p>
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t("noticeTitle")}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{t("noticeSub")}</p>
           </div>
-          <Link to="/notice" className="text-sm text-primary hover:underline">전체보기 →</Link>
+          <Link to="/notice" className="text-sm text-primary hover:underline">{t("viewAll")} →</Link>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           {notices.map((n) => (
@@ -243,7 +240,7 @@ function Index() {
               <h3 className="mt-4 text-base font-semibold leading-snug">{n.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-4">{n.summary}</p>
               <Link to="/notice" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                <FileText className="h-4 w-4" /> 자세히 보기
+                <FileText className="h-4 w-4" /> {t("viewDetail")}
               </Link>
             </article>
           ))}
