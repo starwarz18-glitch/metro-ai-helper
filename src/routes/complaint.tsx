@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Sparkles, CheckCircle2 } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { useLanguage } from "@/lib/language";
 import { toast } from "sonner";
 
 const TYPES = ["운행 지연", "역사 시설", "직원 응대", "안전 신고", "기타"] as const;
@@ -32,8 +33,10 @@ function ComplaintPage() {
     });
   };
 
+  const { t } = useLanguage();
+
   return (
-    <PageShell eyebrow="AI 민원 접수" title="말씀만 하시면 AI가 대신 씁니다" subtitle="상황을 편하게 입력하면 민원 제목·분류·담당부서·요약을 자동 생성합니다.">
+    <PageShell eyebrow={t("pComplaintEyebrow")} title={t("pComplaintTitle")} subtitle={t("pComplaintSub")}>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="glass-card rounded-3xl p-5">
           <label className="text-xs font-medium text-muted-foreground">민원 유형</label>

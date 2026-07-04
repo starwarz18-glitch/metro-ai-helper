@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Search, Accessibility, ArrowUpDown, MapPin, Baby, ArmchairIcon } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { useLanguage } from "@/lib/language";
 
 export const Route = createFileRoute("/station-facilities")({ component: FacilitiesPage });
 
@@ -78,11 +79,13 @@ function FacilitiesPage() {
   const toggle = (k: FilterKey) =>
     setActive((prev) => (prev.includes(k) ? prev.filter((x) => x !== k) : [...prev, k]));
 
+  const { t } = useLanguage();
+
   return (
     <PageShell
-      eyebrow="역별 편의시설 검색"
-      title="필요한 시설, 미리 확인하세요"
-      subtitle="엘리베이터·화장실·수유실 등 편의시설 위치와 교통약자 이동 안내를 제공합니다."
+      eyebrow={t("pFacEyebrow")}
+      title={t("pFacTitle")}
+      subtitle={t("pFacSub")}
     >
       <div className="glass-card rounded-3xl p-4 sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row">

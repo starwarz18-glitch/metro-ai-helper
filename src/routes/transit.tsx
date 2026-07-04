@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight, Clock, Activity, TrainFront, Route as RouteIcon } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { useLanguage } from "@/lib/language";
 
 export const Route = createFileRoute("/transit")({ component: TransitPage });
 
@@ -10,8 +11,10 @@ function TransitPage() {
   const [to, setTo] = useState("시청");
   const [showAlt, setShowAlt] = useState(false);
 
+  const { t } = useLanguage();
+
   return (
-    <PageShell eyebrow="실시간 운행 안내" title="지금 가장 편한 길을 알려드려요" subtitle="혼잡도와 지연을 반영해 AI가 최적 경로를 추천합니다.">
+    <PageShell eyebrow={t("pTransitEyebrow")} title={t("pTransitTitle")} subtitle={t("pTransitSub")}>
       <div className="glass-card grid grid-cols-1 gap-3 rounded-3xl p-4 sm:grid-cols-[1fr_1fr_auto] sm:p-5">
         <label className="flex items-center gap-3 rounded-2xl border bg-white px-4 py-3">
           <span className="text-xs font-medium text-muted-foreground">출발</span>

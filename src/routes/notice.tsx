@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { useLanguage } from "@/lib/language";
 
 export const Route = createFileRoute("/notice")({ component: NoticePage });
 
@@ -34,8 +35,10 @@ const items = [
 
 function NoticePage() {
   const [open, setOpen] = useState<Record<number, boolean>>({});
+  const { t } = useLanguage();
+
   return (
-    <PageShell eyebrow="공지사항 AI 요약" title="긴 공지도 3줄로 요약" subtitle="AI가 핵심만 뽑아 시민이 빠르게 이해할 수 있도록 정리합니다.">
+    <PageShell eyebrow={t("pNoticeEyebrow")} title={t("pNoticeTitle")} subtitle={t("pNoticeSub")}>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {items.map((n, i) => (
           <article key={n.title} className="rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
