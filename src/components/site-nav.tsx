@@ -2,23 +2,23 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, Train, Globe, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { LANGS, useLanguage } from "@/lib/language";
+import { LANGS, useLanguage, type TKey } from "@/lib/language";
 
-const links = [
-  { to: "/", label: "Home" },
-  { to: "/assistant", label: "AI Assistant" },
-  { to: "/transit", label: "운행 안내" },
-  { to: "/lost-found", label: "유실물" },
-  { to: "/complaint", label: "민원 접수" },
-  { to: "/notice", label: "공지 요약" },
-  { to: "/my-metro", label: "My Metro" },
-] as const;
+const links: { to: string; labelKey: TKey }[] = [
+  { to: "/", labelKey: "navHome" },
+  { to: "/assistant", labelKey: "navAssistant" },
+  { to: "/transit", labelKey: "navTransit" },
+  { to: "/lost-found", labelKey: "navLostFound" },
+  { to: "/complaint", labelKey: "navComplaint" },
+  { to: "/notice", labelKey: "navNotice" },
+  { to: "/my-metro", labelKey: "navMy" },
+];
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang, t } = useLanguage();
   const current = LANGS.find((l) => l.code === lang)!;
 
   return (
@@ -28,19 +28,19 @@ export function SiteNav() {
           <span className="grid h-8 w-8 place-items-center rounded-xl bg-[image:var(--gradient-primary)] text-white">
             <Train className="h-4 w-4" />
           </span>
-          <span className="text-sm sm:text-base">서울교통공사 <span className="text-primary">AI 서비스</span></span>
+          <span className="text-sm sm:text-base">서울교통공사 <span className="text-primary">{t("brand")}</span></span>
         </Link>
         <nav className="hidden items-center gap-1 lg:flex">
           {links.map((l) => (
             <Link
-              key={l.to}
+              key={l.to + l.labelKey}
               to={l.to}
               className={cn(
                 "rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground",
                 pathname === l.to && "bg-secondary text-foreground",
               )}
             >
-              {l.label}
+              {t(l.labelKey)}
             </Link>
           ))}
         </nav>
@@ -86,7 +86,7 @@ export function SiteNav() {
         <div className="glass-card mx-auto mt-2 flex max-w-6xl flex-col gap-1 rounded-2xl p-3 lg:hidden">
           {links.map((l) => (
             <Link
-              key={l.to}
+              key={l.to + l.labelKey}
               to={l.to}
               onClick={() => setOpen(false)}
               className={cn(
@@ -94,7 +94,7 @@ export function SiteNav() {
                 pathname === l.to && "bg-secondary",
               )}
             >
-              {l.label}
+              {t(l.labelKey)}
             </Link>
           ))}
         </div>
@@ -104,6 +104,7 @@ export function SiteNav() {
 }
 
 export function SiteFooter() {
+  const { t } = useLanguage();
   return (
     <footer className="border-t border-border bg-white">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
@@ -111,18 +112,18 @@ export function SiteFooter() {
           {/* Left */}
           <div className="flex flex-col gap-2">
             <p className="text-base font-semibold tracking-tight text-foreground">
-              서울교통공사 <span className="text-primary">AI 서비스</span>
+              서울교통공사 <span className="text-primary">{t("brand")}</span>
             </p>
-            <p className="text-sm text-muted-foreground">시민을 위한 AI 기반 디지털 서비스</p>
+            <p className="text-sm text-muted-foreground">{t("footerTagline")}</p>
           </div>
 
           {/* Center */}
           <div className="flex flex-col gap-2.5">
             {[
-              { to: "/assistant", label: "AI Assistant" },
-              { to: "/transit", label: "실시간 운행 안내" },
-              { to: "/lost-found", label: "유실물 찾기" },
-              { to: "/complaint", label: "AI 민원 접수" },
+              { to: "/assistant", label: t("svc1Title") },
+              { to: "/transit", label: t("svc2Title") },
+              { to: "/lost-found", label: t("svc4Title") },
+              { to: "/complaint", label: t("svc6Title") },
             ].map((link) => (
               <Link
                 key={link.to}
@@ -137,12 +138,12 @@ export function SiteFooter() {
           {/* Right */}
           <div className="flex flex-col gap-2.5">
             {[
-              { to: "#", label: "개인정보처리방침" },
-              { to: "#", label: "이용약관" },
-              { to: "#", label: "고객센터" },
+              { to: "#", label: t("footerPrivacy") },
+              { to: "#", label: t("footerTerms") },
+              { to: "#", label: t("footerSupport") },
               {
                 to: "https://www.seoulmetro.co.kr",
-                label: "서울교통공사 홈페이지",
+                label: t("footerHomepage"),
                 external: true,
               },
             ].map((link) =>
@@ -171,7 +172,7 @@ export function SiteFooter() {
 
         {/* Bottom */}
         <div className="mt-12 border-t border-border pt-6 text-center text-xs text-muted-foreground sm:mt-16">
-          © 2026 Seoul Metro AI Service. All Rights Reserved.
+          {t("footerRights")}
         </div>
       </div>
     </footer>
